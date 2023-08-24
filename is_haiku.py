@@ -1,11 +1,10 @@
 import sys, cmudict
 
-def beginning():
+delimiter = " , "
+def main(arg):
     exception_string = ""
-    args = sys.argv
-    arg = args[1]
     string = str(arg).lower()
-    lines = string.split(" , ")
+    lines = string.split(delimiter)
     if (len(lines) > 3):
         raise Exception("Haiku Line Length Exceeds 3")
     if (len(lines) < 3):
@@ -17,7 +16,9 @@ def beginning():
         
         line_syllables = 0
         for word in words:
-            line_syllables += get_syllable_count(word.strip())
+            print(word)
+            if (word is not None):
+                line_syllables += get_syllable_count(word.strip())
             
         if (line_index == 1 and line_syllables > 5):
             exception_string += "Line 1: '" + line + "' exceeds 5 syllables\n"
@@ -38,16 +39,20 @@ def beginning():
             print(exception_string)
     if (len(exception_string) == 0):
         print("it's a haiku")
+        return True
     else:
         print("it's not a haiku")
+        return False
 
 def get_syllable_count(word):
     map = cmudict.dict()
-    syllables = map.get(word)[0]
+    syllable_list = map.get(word)
+    # print(syllable_list)
+    syllables = syllable_list[0]
+    # print(syllables)
     syllable_count = 0
     for syllable in syllables:
         if (str(syllable).endswith("0") or str(syllable).endswith("1") or str(syllable).endswith("2")):
             syllable_count += 1
     return syllable_count
 
-beginning()
